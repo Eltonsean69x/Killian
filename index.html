@@ -373,6 +373,70 @@
       white-space: nowrap;
     }
 
+    /* Achievements / Medals */
+    .achievements {
+      margin-top: 14px;
+      border-top: 1px solid var(--line-subtle);
+      padding-top: 10px;
+    }
+
+    .achievements-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .achievements-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .achievement {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.45);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+      transition:
+        opacity 0.2s ease-out,
+        transform 0.2s ease-out,
+        box-shadow 0.2s ease-out,
+        border-color 0.2s ease-out;
+    }
+
+    .achievement-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .achievement.unlocked {
+      opacity: 1;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 16px rgba(255, 204, 0, 0.35);
+      transform: translateY(-1px);
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 60%);
+    }
+
+    .achievement.unlocked .achievement-icon {
+      background: radial-gradient(circle at top left, var(--accent-yellow), var(--accent-red));
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+    }
+
     /* Main zones grid */
     .zones {
       margin-top: 20px;
@@ -517,9 +581,15 @@
       font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Courier New", monospace;
       font-size: 0.75rem;
       color: #7dffb5;
-      height: 70px;
+      height: 90px;
       overflow: hidden;
       position: relative;
+    }
+
+    .terminal-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .terminal-line {
@@ -538,6 +608,27 @@
 
     @keyframes cursor-blink {
       50% { opacity: 0; }
+    }
+
+    /* Stats row */
+    .stats-row {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .stat-pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .stat-pill strong {
+      color: var(--accent-yellow);
     }
 
     /* Bottom row */
@@ -746,6 +837,14 @@
               <div class="mission-check" aria-hidden="true"></div>
               <span>Play one mini game in the arcade.</span>
             </li>
+            <li class="mission-item" data-id="console">
+              <div class="mission-check" aria-hidden="true"></div>
+              <span>Change the green hacker text once.</span>
+            </li>
+            <li class="mission-item" data-id="celebrate">
+              <div class="mission-check" aria-hidden="true"></div>
+              <span>Press “Celebrate Killian”.</span>
+            </li>
           </ul>
           <div class="mission-footer">
             <div class="mission-hint" id="missionHint">
@@ -764,8 +863,35 @@
         <div class="xp-bar-wrap">
           <div class="xp-bar-fill" id="xpBar"></div>
         </div>
-        <div class="xp-level-label" id="xpLabel">0 / 3</div>
+        <div class="xp-level-label" id="xpLabel">0 / 5</div>
       </div>
+
+      <!-- Achievements / Medals -->
+      <section class="achievements" aria-label="Medals">
+        <h3 class="achievements-title">Medals</h3>
+        <div class="achievements-row">
+          <div class="achievement" data-achievement="firstMission">
+            <div class="achievement-icon">⭐</div>
+            <div>First Mission</div>
+          </div>
+          <div class="achievement" data-achievement="goatWrangler">
+            <div class="achievement-icon">🐐</div>
+            <div>Goat Wrangler</div>
+          </div>
+          <div class="achievement" data-achievement="arcadePilot">
+            <div class="achievement-icon">🕹️</div>
+            <div>Arcade Pilot</div>
+          </div>
+          <div class="achievement" data-achievement="consoleHacker">
+            <div class="achievement-icon">💻</div>
+            <div>Console Hacker</div>
+          </div>
+          <div class="achievement" data-achievement="partyStarter">
+            <div class="achievement-icon">🎉</div>
+            <div>Party Starter</div>
+          </div>
+        </div>
+      </section>
 
       <!-- Zones -->
       <section class="zones" aria-label="Main zones">
@@ -836,29 +962,54 @@
 
         <!-- Command Console / Hacker Typer -->
         <article class="zone-card" id="zoneCommand">
-          <!-- EDIT THIS LINK to your favourite hacker-typer style site -->
-          <a
-            class="zone-link"
-            href="https://hackertyper.net/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <div class="zone-link">
             <div class="zone-top-row">
               <h2 class="zone-title"><span>Command</span> Console</h2>
               <div class="zone-icon-badge">💻</div>
             </div>
             <p class="zone-text">
-              Type like a super hacker and pretend you’re launching secret missions and aircraft.
+              Click in the green box, then press any key to “hack” and run secret fun commands.
             </p>
-            <div class="terminal" id="terminal">
-              <div class="terminal-line" id="terminalLine">> READY: PRESS FOR MISSION LOGS<span class="terminal-cursor"></span></div>
+            <div class="terminal" id="terminal" tabindex="0">
+              <div class="terminal-lines" id="terminalLines">
+                <div class="terminal-line">
+                  &gt; READY: CLICK HERE THEN PRESS A KEY<span class="terminal-cursor"></span>
+                </div>
+              </div>
             </div>
             <div class="zone-footer">
               <div class="zone-tag">Hacker Mode</div>
-              <div class="zone-link-label">Open console →</div>
+              <!-- EDIT THIS LINK to your favourite hacker-typer style site -->
+              <a
+                class="zone-link-label"
+                href="https://hackertyper.net/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open console →
+              </a>
             </div>
-          </a>
+          </div>
         </article>
+      </section>
+
+      <!-- Stats row -->
+      <section class="stats-row" aria-label="Stats">
+        <div class="stat-pill">
+          Missions finished: <strong id="statMissions">0</strong>
+        </div>
+        <div class="stat-pill">
+          Goat jumps: <strong id="statGoat">0</strong>
+        </div>
+        <div class="stat-pill">
+          Hacker lines: <strong id="statLogs">0</strong>
+        </div>
+        <div class="stat-pill">
+          Celebrations: <strong id="statParties">0</strong>
+        </div>
+        <div class="stat-pill">
+          Last visit: <strong id="statLastVisit">First time!</strong>
+        </div>
       </section>
 
       <!-- Bottom row: parent tip + confetti button -->
@@ -904,15 +1055,91 @@
       }
     }
 
+    // Stats
+    let stats = safeGet("killianStats", {
+      missionsCompleted: 0,
+      goatJumps: 0,
+      totalLogLines: 0,
+      totalCelebrations: 0,
+      lastVisit: null
+    });
+
+    const previousVisit = stats.lastVisit;
+    stats.lastVisit = new Date().toISOString();
+    safeSet("killianStats", stats);
+
+    const statMissionsEl = document.getElementById("statMissions");
+    const statGoatEl = document.getElementById("statGoat");
+    const statLogsEl = document.getElementById("statLogs");
+    const statPartiesEl = document.getElementById("statParties");
+    const statLastVisitEl = document.getElementById("statLastVisit");
+
+    function formatDateShort(iso) {
+      if (!iso) return "First time!";
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return "First time!";
+      return d.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+    }
+
+    function renderStats() {
+      statMissionsEl.textContent = stats.missionsCompleted;
+      statGoatEl.textContent = stats.goatJumps;
+      statLogsEl.textContent = stats.totalLogLines;
+      statPartiesEl.textContent = stats.totalCelebrations;
+      statLastVisitEl.textContent = formatDateShort(previousVisit);
+    }
+
     // Missions & XP
-    const missionIds = ["hotwheels", "goat", "arcade"];
-    let completedMissions = safeGet("killianMissions", { hotwheels: false, goat: false, arcade: false });
+    const missionIds = ["hotwheels", "goat", "arcade", "console", "celebrate"];
+    let completedMissions = safeGet("killianMissions", {
+      hotwheels: false,
+      goat: false,
+      arcade: false,
+      console: false,
+      celebrate: false
+    });
 
     const missionListEl = document.getElementById("missionList");
     const missionHintEl = document.getElementById("missionHint");
     const missionButtonEl = document.getElementById("missionButton");
     const xpBarEl = document.getElementById("xpBar");
     const xpLabelEl = document.getElementById("xpLabel");
+
+    const achievementEls = {
+      firstMission: document.querySelector('[data-achievement="firstMission"]'),
+      goatWrangler: document.querySelector('[data-achievement="goatWrangler"]'),
+      arcadePilot: document.querySelector('[data-achievement="arcadePilot"]'),
+      consoleHacker: document.querySelector('[data-achievement="consoleHacker"]'),
+      partyStarter: document.querySelector('[data-achievement="partyStarter"]')
+    };
+
+    function renderAchievements() {
+      const doneCount = missionIds.filter(id => completedMissions[id]).length;
+      const goatWranglerUnlocked = stats.goatJumps >= 10;
+      const arcadePilotUnlocked = !!completedMissions.arcade;
+      const consoleHackerUnlocked = !!completedMissions.console || stats.totalLogLines >= 3;
+      const partyStarterUnlocked = stats.totalCelebrations >= 3;
+
+      if (achievementEls.firstMission) {
+        achievementEls.firstMission.classList.toggle("unlocked", doneCount >= 1);
+      }
+      if (achievementEls.goatWrangler) {
+        achievementEls.goatWrangler.classList.toggle("unlocked", goatWranglerUnlocked);
+      }
+      if (achievementEls.arcadePilot) {
+        achievementEls.arcadePilot.classList.toggle("unlocked", arcadePilotUnlocked);
+      }
+      if (achievementEls.consoleHacker) {
+        achievementEls.consoleHacker.classList.toggle("unlocked", consoleHackerUnlocked);
+      }
+      if (achievementEls.partyStarter) {
+        achievementEls.partyStarter.classList.toggle("unlocked", partyStarterUnlocked);
+      }
+    }
 
     function renderMissions() {
       missionIds.forEach(id => {
@@ -940,12 +1167,18 @@
       } else {
         missionHintEl.textContent = "You’re on your way – keep going!";
       }
+
+      renderAchievements();
     }
 
     function markMissionDone(id) {
       if (!missionIds.includes(id)) return;
+      if (completedMissions[id]) return; // already counted
       completedMissions[id] = true;
+      stats.missionsCompleted += 1;
       safeSet("killianMissions", completedMissions);
+      safeSet("killianStats", stats);
+      renderStats();
       renderMissions();
     }
 
@@ -979,6 +1212,11 @@
         goatIcon.classList.add("hop");
 
         goatClicks++;
+        stats.goatJumps += 1;
+        safeSet("killianStats", stats);
+        renderStats();
+        renderAchievements();
+
         const msg = goatMessages[Math.floor(Math.random() * goatMessages.length)];
         if (goatText) {
           goatText.textContent = msg;
@@ -1005,31 +1243,64 @@
       });
     }
 
-    // Command console fake terminal
+    // Command console fake terminal with keypress "hacking"
     const terminal = document.getElementById("terminal");
-    const terminalLine = document.getElementById("terminalLine");
-    const terminalMessages = [
-      "> LINK ESTABLISHED: KILLIAN_CONTROL_CENTER",
-      "> AUTH OK: AGENT KILLIAN [LEVEL 6]",
-      "> LOADING: HOT_WHEELS_LAUNCH_TRACK.EXE",
-      "> ARMING: SILLY_GOAT_MODULE...",
-      "> BOOTING: SECRET_ARCADE_CORE...",
-      "> READY: PRESS ANY KEY TO DEPLOY FUN"
+    const terminalLinesEl = document.getElementById("terminalLines");
+    const terminalSnippets = [
+      "> INIT SEQUENCE: AIRCRAFT_01 ONLINE;",
+      "> RUN HOT_WHEELS_TURBO_TRACK();",
+      "> GOAT.simulateChaos(level=9000);",
+      "> SCAN ARCADE_PORTAL... ACCESS GRANTED;",
+      "> UPLOAD MISSION_DATA TO AGENT_KILLIAN;",
+      "> DEPLOY FUN_DRONES();",
+      "> EXECUTE SUPER_SECRET_MISSION();"
     ];
-    let terminalIndex = 0;
+    let terminalLog = [
+      "> READY: CLICK HERE THEN PRESS A KEY"
+    ];
+    let hackerModeActive = false;
+    let consoleMissionDoneOnce = false;
 
-    function rotateTerminal() {
-      if (!terminalLine) return;
-      terminalIndex = (terminalIndex + 1) % terminalMessages.length;
-      terminalLine.textContent = terminalMessages[terminalIndex];
-      const cursor = document.createElement("span");
-      cursor.className = "terminal-cursor";
-      terminalLine.appendChild(cursor);
+    function renderTerminal() {
+      if (!terminalLinesEl) return;
+      terminalLinesEl.innerHTML = "";
+      terminalLog.slice(-4).forEach((line, index, arr) => {
+        const div = document.createElement("div");
+        div.className = "terminal-line";
+        div.textContent = line;
+        if (index === arr.length - 1) {
+          const cursor = document.createElement("span");
+          cursor.className = "terminal-cursor";
+          div.appendChild(cursor);
+        }
+        terminalLinesEl.appendChild(div);
+      });
     }
 
     if (terminal) {
-      terminal.addEventListener("click", rotateTerminal);
+      terminal.addEventListener("click", (e) => {
+        e.stopPropagation();
+        hackerModeActive = true;
+        terminal.focus();
+      });
     }
+
+    window.addEventListener("keydown", (e) => {
+      if (!hackerModeActive) return;
+      const snippet = terminalSnippets[Math.floor(Math.random() * terminalSnippets.length)];
+      terminalLog.push(snippet);
+      stats.totalLogLines += 1;
+      safeSet("killianStats", stats);
+      renderStats();
+      renderTerminal();
+
+      if (!consoleMissionDoneOnce) {
+        consoleMissionDoneOnce = true;
+        markMissionDone("console");
+      } else {
+        renderAchievements();
+      }
+    });
 
     // Confetti
     const confettiColors = [
@@ -1057,11 +1328,20 @@
 
     const confettiButton = document.getElementById("confettiButton");
     if (confettiButton) {
-      confettiButton.addEventListener("click", () => launchConfetti());
+      confettiButton.addEventListener("click", () => {
+        launchConfetti();
+        stats.totalCelebrations += 1;
+        safeSet("killianStats", stats);
+        renderStats();
+        markMissionDone("celebrate");
+        renderAchievements();
+      });
     }
 
     // Initial render
+    renderStats();
     renderMissions();
+    renderTerminal();
   </script>
 </body>
 </html>
