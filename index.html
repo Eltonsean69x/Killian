@@ -383,7 +383,13 @@
 
     @media (min-width: 720px) {
       .zones {
-        grid-template-columns: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 2fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 960px) {
+      .zones {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
       }
     }
 
@@ -501,6 +507,39 @@
       100% { transform: translateY(0) rotate(0deg); }
     }
 
+    /* Fake terminal for Command Console */
+    .terminal {
+      margin-top: 6px;
+      background: #050812;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 255, 120, 0.4);
+      padding: 6px 8px;
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.75rem;
+      color: #7dffb5;
+      height: 70px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .terminal-line {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .terminal-cursor {
+      display: inline-block;
+      width: 6px;
+      margin-left: 2px;
+      background: #7dffb5;
+      animation: cursor-blink 1s step-start infinite;
+    }
+
+    @keyframes cursor-blink {
+      50% { opacity: 0; }
+    }
+
     /* Bottom row */
     .bottom-row {
       margin-top: 18px;
@@ -592,7 +631,7 @@
       }
     }
 
-    /* Cars track at bottom */
+    /* Cars track at the bottom */
     .cars-track {
       position: fixed;
       left: 0;
@@ -664,12 +703,12 @@
               <div class="profile-name-row">
                 <div class="profile-name">KILLIAN</div>
               </div>
-              <div class="profile-tagline">Hot Wheels · Goats · Xbox</div>
+              <div class="profile-tagline">Hot Wheels · Goats · Xbox · Hacks</div>
             </div>
 
             <div class="level-badge">
               <span class="level-dot"></span>
-              <span>Level 6 · Hot Wheels Pro</span>
+              <span>Level 6 · Control Center</span>
             </div>
 
             <div class="status-chips">
@@ -681,6 +720,9 @@
               </div>
               <div class="chip">
                 <span>🕹️ Arcade loaded</span>
+              </div>
+              <div class="chip">
+                <span>💻 Hacker console online</span>
               </div>
             </div>
           </div>
@@ -791,6 +833,32 @@
             </div>
           </a>
         </article>
+
+        <!-- Command Console / Hacker Typer -->
+        <article class="zone-card" id="zoneCommand">
+          <!-- EDIT THIS LINK to your favourite hacker-typer style site -->
+          <a
+            class="zone-link"
+            href="https://hackertyper.net/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="zone-top-row">
+              <h2 class="zone-title"><span>Command</span> Console</h2>
+              <div class="zone-icon-badge">💻</div>
+            </div>
+            <p class="zone-text">
+              Type like a super hacker and pretend you’re launching secret missions and aircraft.
+            </p>
+            <div class="terminal" id="terminal">
+              <div class="terminal-line" id="terminalLine">> READY: PRESS FOR MISSION LOGS<span class="terminal-cursor"></span></div>
+            </div>
+            <div class="zone-footer">
+              <div class="zone-tag">Hacker Mode</div>
+              <div class="zone-link-label">Open console →</div>
+            </div>
+          </a>
+        </article>
       </section>
 
       <!-- Bottom row: parent tip + confetti button -->
@@ -887,7 +955,6 @@
         if (doneCount === missionIds.length) {
           launchConfetti(130);
         } else {
-          // Soft nudge, no confetti unless actually done
           launchConfetti(40);
         }
       });
@@ -936,6 +1003,32 @@
       zoneArcade.addEventListener("click", () => {
         markMissionDone("arcade");
       });
+    }
+
+    // Command console fake terminal
+    const terminal = document.getElementById("terminal");
+    const terminalLine = document.getElementById("terminalLine");
+    const terminalMessages = [
+      "> LINK ESTABLISHED: KILLIAN_CONTROL_CENTER",
+      "> AUTH OK: AGENT KILLIAN [LEVEL 6]",
+      "> LOADING: HOT_WHEELS_LAUNCH_TRACK.EXE",
+      "> ARMING: SILLY_GOAT_MODULE...",
+      "> BOOTING: SECRET_ARCADE_CORE...",
+      "> READY: PRESS ANY KEY TO DEPLOY FUN"
+    ];
+    let terminalIndex = 0;
+
+    function rotateTerminal() {
+      if (!terminalLine) return;
+      terminalIndex = (terminalIndex + 1) % terminalMessages.length;
+      terminalLine.textContent = terminalMessages[terminalIndex];
+      const cursor = document.createElement("span");
+      cursor.className = "terminal-cursor";
+      terminalLine.appendChild(cursor);
+    }
+
+    if (terminal) {
+      terminal.addEventListener("click", rotateTerminal);
     }
 
     // Confetti
