@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Killian's Awesome Page</title>
+  <title>Killian Control Center</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fun fonts -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -15,40 +15,18 @@
 
   <style>
     :root {
-      --bg-main: #050f2b;
-      --bg-main-soft: #071638;
-      --accent-primary: #ffcc00;
-      --accent-secondary: #ff3b30;
-      --accent-tertiary: #1ed760;
-      --card-bg: #0b1c46;
-      --card-border: #1a2c5e;
+      --bg-main: #050b1f;
+      --bg-main-soft: #071432;
+      --accent-yellow: #ffcc00;
+      --accent-red: #ff3b30;
+      --accent-green: #2ecc71;
+      --accent-blue: #1a8cff;
+      --card-bg: #0b1635;
+      --card-bg-soft: #101d40;
+      --card-border: #1f3567;
       --text-main: #ffffff;
       --text-muted: rgba(255, 255, 255, 0.7);
-    }
-
-    /* Theme overrides */
-    body.theme-cars {
-      --accent-primary: #ffcc00;
-      --accent-secondary: #ff3b30;
-      --accent-tertiary: #1ed760;
-    }
-
-    body.theme-goats {
-      --accent-primary: #9eff3b;
-      --accent-secondary: #ff9ff3;
-      --accent-tertiary: #fff06b;
-    }
-
-    body.theme-xbox {
-      --accent-primary: #2ecc71;
-      --accent-secondary: #27ae60;
-      --accent-tertiary: #16a085;
-    }
-
-    body.theme-rainbow {
-      --accent-primary: #ff9a9e;
-      --accent-secondary: #fad0c4;
-      --accent-tertiary: #a18cd1;
+      --line-subtle: rgba(255, 255, 255, 0.08);
     }
 
     * {
@@ -61,8 +39,8 @@
       font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       min-height: 100vh;
       background:
-        radial-gradient(circle at top right, #143371 0, transparent 55%),
-        radial-gradient(circle at bottom left, #0a1a3f 0, transparent 60%),
+        radial-gradient(circle at top right, #1b2e68 0, transparent 55%),
+        radial-gradient(circle at bottom left, #0a173d 0, transparent 60%),
         linear-gradient(to bottom, var(--bg-main), var(--bg-main-soft));
       color: var(--text-main);
       display: flex;
@@ -74,332 +52,526 @@
 
     .wrapper {
       width: 100%;
-      max-width: 980px;
+      max-width: 1040px;
       position: relative;
       z-index: 1;
     }
 
-    .card {
-      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), transparent 55%),
-                  linear-gradient(145deg, rgba(11, 28, 70, 0.98), rgba(4, 12, 34, 0.98));
-      border-radius: 28px;
-      padding: 24px 18px 26px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+    .shell {
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 60%),
+        linear-gradient(135deg, rgba(11, 22, 53, 0.96), rgba(5, 10, 31, 0.98));
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.55),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
+        0 30px 60px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(0, 0, 0, 0.7);
+      padding: 22px 16px 24px;
       backdrop-filter: blur(18px);
     }
 
     @media (min-width: 768px) {
-      .card {
-        padding: 28px 28px 30px;
+      .shell {
+        padding: 26px 26px 28px;
       }
     }
 
-    /* Flame-style header */
-    .header {
-      position: relative;
-      margin-bottom: 18px;
+    /* Top bar: avatar + name + level */
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line-subtle);
+      padding-bottom: 14px;
     }
 
-    .header-banner {
-      position: relative;
-      display: inline-block;
-      padding: 12px 26px 14px 20px;
-      transform: skewX(-14deg);
-      background: linear-gradient(130deg, var(--accent-secondary), var(--accent-primary));
-      box-shadow:
-        0 10px 0 #b52111,
-        0 18px 32px rgba(0, 0, 0, 0.6);
-      border-radius: 999px;
-    }
-
-    .header-banner-inner {
-      transform: skewX(14deg);
+    .profile {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 14px;
     }
 
-    .header-title {
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      background: conic-gradient(
+        from 210deg,
+        var(--accent-red),
+        var(--accent-yellow),
+        var(--accent-blue),
+        var(--accent-red)
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow:
+        0 0 0 3px rgba(0, 0, 0, 0.9),
+        0 0 18px rgba(0, 0, 0, 0.7);
+    }
+
+    .avatar-inner {
+      width: 80%;
+      height: 80%;
+      border-radius: inherit;
+      background: radial-gradient(circle at top left, #ffffff, #ffe071);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: "Bangers", system-ui;
-      font-size: clamp(2.7rem, 5vw, 3.4rem);
-      letter-spacing: 0.08em;
+      font-size: 2.2rem;
+      color: #d21500;
+      text-shadow:
+        0 2px 0 rgba(0, 0, 0, 0.4),
+        0 4px 8px rgba(0, 0, 0, 0.45);
+    }
+
+    .profile-text-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .profile-name-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .profile-name {
+      font-family: "Bangers", system-ui;
+      font-size: 2rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #ffffff;
       text-shadow:
-        0 3px 0 rgba(0, 0, 0, 0.45),
-        0 6px 0 rgba(0, 0, 0, 0.65);
+        0 3px 0 rgba(0, 0, 0, 0.5),
+        0 6px 12px rgba(0, 0, 0, 0.7);
     }
 
-    .header-badge {
-      font-size: 0.75rem;
+    .profile-tagline {
+      font-size: 0.8rem;
       text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-
-    .header-sub {
-      margin-top: 12px;
-      font-size: 0.95rem;
+      letter-spacing: 0.16em;
       color: var(--text-muted);
     }
 
-    .header-sub strong {
-      color: var(--accent-primary);
-      font-weight: 800;
+    .level-badge {
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
 
-    /* Theme selector row */
-    .theme-row {
-      margin-top: 14px;
+    .level-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent-yellow);
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+    }
+
+    .status-chips {
       display: flex;
       flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 0.72rem;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 4px 8px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(0, 0, 0, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .chip span {
+      font-size: 0.85rem;
+    }
+
+    /* Today's mission card */
+    .mission-card {
+      flex: 1;
+      max-width: 360px;
+      background: linear-gradient(145deg, #141f48, #090f28);
+      border-radius: 18px;
+      padding: 12px 14px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.7);
+    }
+
+    .mission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .mission-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+    }
+
+    .mission-label {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 3px 8px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .mission-list {
+      list-style: none;
+      margin: 4px 0 6px;
+      padding: 0;
+    }
+
+    .mission-item {
+      display: flex;
+      align-items: center;
       gap: 8px;
+      font-size: 0.85rem;
+      padding: 4px 0;
+      color: var(--text-muted);
+    }
+
+    .mission-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--accent-green);
+    }
+
+    .mission-item.completed {
+      color: rgba(180, 255, 190, 0.9);
+    }
+
+    .mission-item.completed .mission-check {
+      background: rgba(46, 204, 113, 0.15);
+      border-color: var(--accent-green);
+    }
+
+    .mission-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mission-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .mission-button {
+      border-radius: 999px;
+      border: none;
+      padding: 6px 12px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: linear-gradient(135deg, var(--accent-yellow), var(--accent-red));
+      color: #1f1300;
+      box-shadow:
+        0 10px 18px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(0, 0, 0, 0.7);
+      transform: translateY(0);
+      white-space: nowrap;
+      transition:
+        transform 0.12s ease-out,
+        box-shadow 0.12s ease-out,
+        filter 0.12s ease-out;
+    }
+
+    .mission-button:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 14px 24px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(0, 0, 0, 0.8);
+      filter: brightness(1.03);
+    }
+
+    .mission-button:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(0, 0, 0, 0.8);
+    }
+
+    @media (max-width: 720px) {
+      .top-bar {
+        align-items: flex-start;
+      }
+      .mission-card {
+        width: 100%;
+      }
+    }
+
+    /* XP strip */
+    .xp-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .xp-label {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+    }
+
+    .xp-bar-wrap {
+      flex: 1;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+    }
+
+    .xp-bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent-yellow), var(--accent-red));
+      width: 0%;
+      transition: width 0.3s ease-out;
+    }
+
+    .xp-level-label {
+      white-space: nowrap;
+    }
+
+    /* Main zones grid */
+    .zones {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 720px) {
+      .zones {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 2fr);
+      }
+    }
+
+    .zone-card {
+      position: relative;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), transparent 60%),
+                  linear-gradient(150deg, var(--card-bg), var(--card-bg-soft));
+      border-radius: 20px;
+      padding: 14px 13px 14px;
+      border: 1px solid var(--card-border);
+      box-shadow:
+        0 16px 30px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(0, 0, 0, 0.85);
+      cursor: pointer;
+      transition:
+        transform 0.16s ease-out,
+        box-shadow 0.16s ease-out,
+        border-color 0.16s ease-out;
+      overflow: hidden;
+    }
+
+    .zone-card:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        0 22px 40px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(0, 0, 0, 0.85);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .zone-card:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .zone-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .zone-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .zone-title span {
+      color: var(--accent-yellow);
+    }
+
+    .zone-icon-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.8),
+        0 4px 10px rgba(0, 0, 0, 0.9);
+    }
+
+    .zone-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      min-height: 2.8em;
+    }
+
+    .zone-footer {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
       font-size: 0.78rem;
       color: var(--text-muted);
     }
 
-    .theme-row-label {
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      font-weight: 700;
-    }
-
-    .theme-buttons {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .theme-btn {
+    .zone-tag {
       border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      background: rgba(0, 0, 0, 0.25);
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      cursor: pointer;
-      color: var(--text-main);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition:
-        background 0.15s ease-out,
-        border-color 0.15s ease-out,
-        transform 0.15s ease-out;
-    }
-
-    .theme-btn span {
-      font-size: 0.95rem;
-    }
-
-    .theme-btn:hover {
-      background: rgba(0, 0, 0, 0.4);
-      transform: translateY(-1px);
-    }
-
-    .theme-btn.active {
-      background: rgba(0, 0, 0, 0.8);
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
-    }
-
-    /* Main grid */
-    .grid {
-      margin-top: 22px;
-      display: grid;
-      gap: 14px;
-      grid-template-columns: 1fr;
-    }
-
-    @media (min-width: 640px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (min-width: 960px) {
-      .grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-    }
-
-    .tile {
-      position: relative;
-      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.07), transparent 60%),
-                  linear-gradient(150deg, var(--card-bg), #050f2b);
-      border-radius: 20px;
-      padding: 14px 14px 16px;
-      box-shadow:
-        0 10px 22px rgba(0, 0, 0, 0.65),
-        0 0 0 1px rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      cursor: pointer;
-      transition:
-        transform 0.18s ease-out,
-        box-shadow 0.18s ease-out,
-        border-color 0.18s ease-out;
-      overflow: hidden;
-    }
-
-    .tile:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.8);
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-
-    .tile:active {
-      transform: translateY(0px) scale(0.99);
-    }
-
-    .tile-emoji {
-      font-size: 1.8rem;
-      margin-bottom: 6px;
-    }
-
-    .tile-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      margin-bottom: 4px;
-      letter-spacing: 0.03em;
-    }
-
-    .tile-title span {
-      color: var(--accent-primary);
-    }
-
-    .tile-text {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      min-height: 2.7em;
-    }
-
-    .tile-tag {
-      margin-top: 8px;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      opacity: 0.85;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
       padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px dashed rgba(255, 255, 255, 0.4);
-      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.45);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
 
-    .tile-link {
+    .zone-link-label {
+      opacity: 0.9;
+    }
+
+    .zone-link {
       color: inherit;
       text-decoration: none;
       display: block;
     }
 
+    /* Goat hop */
     .goat-icon {
       display: inline-block;
-      transition: transform 0.15s ease-out;
+      transition: transform 0.14s ease-out;
     }
 
-    .goat-icon.jump {
+    .goat-icon.hop {
       animation: goat-hop 550ms ease-out;
     }
 
     @keyframes goat-hop {
       0% { transform: translateY(0) rotate(0deg); }
-      30% { transform: translateY(-12px) rotate(-10deg); }
-      60% { transform: translateY(-4px) rotate(6deg); }
+      30% { transform: translateY(-10px) rotate(-10deg); }
+      60% { transform: translateY(-3px) rotate(5deg); }
       100% { transform: translateY(0) rotate(0deg); }
     }
 
-    .xbox-glow {
-      box-shadow:
-        0 0 18px rgba(46, 204, 113, 0.9),
-        0 0 0 1px rgba(46, 204, 113, 0.7);
-    }
-
-    .xbox-glow-remove {
-      transition: box-shadow 0.4s ease-out;
-    }
-
-    /* Confetti button row */
+    /* Bottom row */
     .bottom-row {
-      margin-top: 20px;
+      margin-top: 18px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      align-items: center;
       justify-content: space-between;
-      font-size: 0.85rem;
+      align-items: center;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
     .tip-pill {
       padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(0, 0, 0, 0.55);
     }
 
-    .confetti-button {
+    .confetti-button-main {
       border-radius: 999px;
       border: none;
-      padding: 9px 18px;
-      font-size: 0.82rem;
+      padding: 7px 14px;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.16em;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: linear-gradient(130deg, var(--accent-primary), var(--accent-secondary));
-      color: #1a1300;
+      gap: 5px;
+      background: linear-gradient(130deg, var(--accent-blue), var(--accent-yellow));
+      color: #010611;
       box-shadow:
-        0 10px 22px rgba(0, 0, 0, 0.75),
-        0 0 0 1px rgba(0, 0, 0, 0.7);
+        0 10px 18px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(0, 0, 0, 0.85);
       transform: translateY(0);
       transition:
-        transform 0.14s ease-out,
-        box-shadow 0.14s ease-out,
-        filter 0.14s ease-out;
+        transform 0.12s ease-out,
+        box-shadow 0.12s ease-out,
+        filter 0.12s ease-out;
       white-space: nowrap;
     }
 
-    .confetti-button:hover {
-      transform: translateY(-2px);
+    .confetti-button-main:hover {
+      transform: translateY(-1px);
       box-shadow:
-        0 14px 26px rgba(0, 0, 0, 0.9),
-        0 0 0 1px rgba(0, 0, 0, 0.7);
-      filter: brightness(1.05);
+        0 14px 24px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(0, 0, 0, 0.9);
+      filter: brightness(1.04);
     }
 
-    .confetti-button:active {
+    .confetti-button-main:active {
       transform: translateY(0) scale(0.98);
       box-shadow:
-        0 8px 18px rgba(0, 0, 0, 0.7),
-        0 0 0 1px rgba(0, 0, 0, 0.7);
+        0 8px 16px rgba(0, 0, 0, 0.85),
+        0 0 0 1px rgba(0, 0, 0, 0.9);
     }
 
     .footer {
       margin-top: 10px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       text-align: center;
       opacity: 0.65;
     }
 
     .footer span {
-      color: var(--accent-primary);
+      color: var(--accent-yellow);
     }
 
-    /* Confetti pieces */
+    /* Confetti */
     .confetti-piece {
       position: fixed;
       width: 10px;
@@ -420,12 +592,12 @@
       }
     }
 
-    /* Cars animation at bottom */
+    /* Cars track at bottom */
     .cars-track {
       position: fixed;
       left: 0;
       right: 0;
-      bottom: 8px;
+      bottom: 6px;
       pointer-events: none;
       z-index: 0;
     }
@@ -433,7 +605,7 @@
     .car-lane {
       position: relative;
       width: 100%;
-      height: 28px;
+      height: 26px;
       overflow: hidden;
       opacity: 0.7;
     }
@@ -445,8 +617,8 @@
       animation: car-drive linear infinite;
       white-space: nowrap;
       text-shadow:
-        0 0 6px rgba(0, 0, 0, 0.8),
-        0 0 2px rgba(0, 0, 0, 0.9);
+        0 0 6px rgba(0, 0, 0, 0.9),
+        0 0 2px rgba(0, 0, 0, 1);
     }
 
     .car:nth-child(1) {
@@ -456,159 +628,185 @@
 
     .car:nth-child(2) {
       animation-duration: 18s;
-      animation-delay: -9s;
+      animation-delay: -10s;
       opacity: 0.85;
     }
 
     .car:nth-child(3) {
       animation-duration: 20s;
-      animation-delay: -14s;
+      animation-delay: -15s;
       opacity: 0.6;
     }
 
     @keyframes car-drive {
-      0% {
-        transform: translateX(-15%);
-      }
-      100% {
-        transform: translateX(115%);
-      }
+      0%   { transform: translateX(-15%); }
+      100% { transform: translateX(115%); }
     }
 
     @media (max-width: 600px) {
       .cars-track {
-        display: none; /* hide on tiny screens if it feels too busy */
+        display: none;
       }
     }
   </style>
 </head>
-<body class="theme-cars">
+<body>
   <div class="wrapper">
-    <main class="card" role="main">
-      <!-- Header -->
-      <header class="header" aria-label="Killian header">
-        <div class="header-banner">
-          <div class="header-banner-inner">
-            <div class="header-title">KILLIAN</div>
-            <div class="header-badge">Super Speed Edition</div>
+    <div class="shell">
+      <!-- Top: Avatar, name, level, missions -->
+      <div class="top-bar">
+        <section class="profile" aria-label="Killian profile">
+          <div class="avatar">
+            <div class="avatar-inner">K</div>
           </div>
-        </div>
-        <p class="header-sub">
-          Tap a tile to go to your <strong>cars</strong>, <strong>goats</strong>, and <strong>games</strong>, champ. 🎮
-        </p>
+          <div class="profile-text-main">
+            <div>
+              <div class="profile-name-row">
+                <div class="profile-name">KILLIAN</div>
+              </div>
+              <div class="profile-tagline">Hot Wheels · Goats · Xbox</div>
+            </div>
 
-        <div class="theme-row" aria-label="Choose theme">
-          <div class="theme-row-label">Theme:</div>
-          <div class="theme-buttons">
-            <button class="theme-btn active" data-theme="cars">
-              <span>🚗</span> Cars
-            </button>
-            <button class="theme-btn" data-theme="goats">
-              <span>🐐</span> Goats
-            </button>
-            <button class="theme-btn" data-theme="xbox">
-              <span>🎮</span> Xbox
-            </button>
-            <button class="theme-btn" data-theme="rainbow">
-              <span>🌈</span> Rainbow
+            <div class="level-badge">
+              <span class="level-dot"></span>
+              <span>Level 6 · Hot Wheels Pro</span>
+            </div>
+
+            <div class="status-chips">
+              <div class="chip">
+                <span>🚗 Garage unlocked</span>
+              </div>
+              <div class="chip">
+                <span>🐐 Goat Lab ready</span>
+              </div>
+              <div class="chip">
+                <span>🕹️ Arcade loaded</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="mission-card" aria-label="Today's mission">
+          <div class="mission-header">
+            <div class="mission-title">Today’s Mission</div>
+            <div class="mission-label">For Agent Killian</div>
+          </div>
+          <ul class="mission-list" id="missionList">
+            <li class="mission-item" data-id="hotwheels">
+              <div class="mission-check" aria-hidden="true"></div>
+              <span>Watch one Hot Wheels video.</span>
+            </li>
+            <li class="mission-item" data-id="goat">
+              <div class="mission-check" aria-hidden="true"></div>
+              <span>Make the goat jump three times.</span>
+            </li>
+            <li class="mission-item" data-id="arcade">
+              <div class="mission-check" aria-hidden="true"></div>
+              <span>Play one mini game in the arcade.</span>
+            </li>
+          </ul>
+          <div class="mission-footer">
+            <div class="mission-hint" id="missionHint">
+              Complete all steps, then press the button!
+            </div>
+            <button class="mission-button" id="missionButton" type="button">
+              ✅ Mission Complete
             </button>
           </div>
-        </div>
-      </header>
+        </section>
+      </div>
 
-      <!-- Main tiles -->
-      <section class="grid" aria-label="Killian shortcuts">
-        <!-- Hot Wheels tile -->
-        <article class="tile">
-          <!-- TODO: swap the link for a specific playlist you like -->
+      <!-- XP strip -->
+      <div class="xp-strip">
+        <div class="xp-label">XP</div>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-fill" id="xpBar"></div>
+        </div>
+        <div class="xp-level-label" id="xpLabel">0 / 3</div>
+      </div>
+
+      <!-- Zones -->
+      <section class="zones" aria-label="Main zones">
+        <!-- Garage / Hot Wheels -->
+        <article class="zone-card" id="zoneGarage">
+          <!-- EDIT THIS LINK to your playlist or Hot Wheels hub -->
           <a
-            class="tile-link"
+            class="zone-link"
             href="https://www.youtube.com/results?search_query=hot+wheels+kids"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <div class="tile-emoji">🚗</div>
-            <div class="tile-title">
-              <span>Hot Wheels</span> Zone
+            <div class="zone-top-row">
+              <h2 class="zone-title"><span>Garage</span> HQ</h2>
+              <div class="zone-icon-badge">🚗</div>
             </div>
-            <p class="tile-text">
-              Watch giant jumps, crazy loops, and super-fast cars.
+            <p class="zone-text">
+              All your cars in one place – crazy tracks, giant jumps, and super-fast Hot Wheels videos.
             </p>
-            <div class="tile-tag">
-              <span>TIP:</span> Change this to your playlist.
+            <div class="zone-footer">
+              <div class="zone-tag">Hot Wheels Zone</div>
+              <div class="zone-link-label">Open videos →</div>
             </div>
           </a>
         </article>
 
-        <!-- Goat tile (no Steam link) -->
-        <article class="tile" id="goatTile">
-          <div class="tile-link">
-            <div class="tile-emoji goat-icon" id="goatIcon">🐐</div>
-            <div class="tile-title">
-              <span>Goat</span> Time
+        <!-- Goat Lab (no external link required) -->
+        <article class="zone-card" id="zoneGoat">
+          <div class="zone-link">
+            <div class="zone-top-row">
+              <h2 class="zone-title"><span>Goat</span> Lab</h2>
+              <div class="zone-icon-badge">
+                <span class="goat-icon" id="goatIcon">🐐</span>
+              </div>
             </div>
-            <p class="tile-text" id="goatMessage">
-              Tap the goat to make it hop and be mega silly.
+            <p class="zone-text" id="goatText">
+              Tap the goat icon to make it hop and unlock ultra-silly goat messages.
             </p>
-            <div class="tile-tag">
-              <span>NOTE:</span> No Steam link here, all good.
+            <div class="zone-footer">
+              <div class="zone-tag">Silly Mode</div>
+              <div class="zone-link-label">Tap the goat ↑</div>
             </div>
           </div>
         </article>
 
-        <!-- Mini games tile -->
-        <article class="tile">
-          <!-- TODO: swap link for a kid-safe games hub you trust or a specific site -->
+        <!-- Arcade / mini games -->
+        <article class="zone-card" id="zoneArcade">
+          <!-- EDIT THIS LINK to your safe kids games site -->
           <a
-            class="tile-link"
+            class="zone-link"
             href="https://poki.com"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <div class="tile-emoji">🕹️</div>
-            <div class="tile-title">
-              <span>Mini</span> Games
+            <div class="zone-top-row">
+              <h2 class="zone-title"><span>Arcade</span> Deck</h2>
+              <div class="zone-icon-badge">🕹️</div>
             </div>
-            <p class="tile-text">
-              Little browser games to play online. You pick the safe ones.
+            <p class="zone-text">
+              Mini games you approve. Swap this link for your favourite kid-safe game website.
             </p>
-            <div class="tile-tag">
-              <span>EDIT:</span> Replace with your games site.
+            <div class="zone-footer">
+              <div class="zone-tag">Games Hub</div>
+              <div class="zone-link-label">Enter arcade →</div>
             </div>
           </a>
         </article>
-
-        <!-- Xbox tile (cheer, no confetti) -->
-        <article class="tile" id="xboxTile">
-          <div class="tile-link">
-            <div class="tile-emoji">🎮</div>
-            <div class="tile-title">
-              <span>Xbox</span> Game Time
-            </div>
-            <p class="tile-text" id="xboxMessage">
-              Tap this when you start Xbox for a power-up cheer!
-            </p>
-            <div class="tile-tag">
-              <span>CHEER:</span> No timers, just hype.
-            </div>
-          </div>
-        </article>
       </section>
 
-      <!-- Bottom row -->
+      <!-- Bottom row: parent tip + confetti button -->
       <section class="bottom-row">
         <div class="tip-pill">
-          Grown-up tip: bookmark this page so Killian can find it easily.
+          Parent tip: bookmark this page so Killian can open his Control Center by himself.
         </div>
-        <button class="confetti-button" id="confettiButton" type="button">
-          🎉 Magic Confetti
+        <button class="confetti-button-main" id="confettiButton" type="button">
+          🎉 Celebrate Killian
         </button>
       </section>
 
       <p class="footer">
         Made with <span>❤️</span> just for Killian.
       </p>
-    </main>
+    </div>
   </div>
 
   <!-- Cars track at the bottom -->
@@ -621,43 +819,126 @@
   </div>
 
   <script>
-    // === THEME HANDLING ===
-    const themeButtons = document.querySelectorAll(".theme-btn");
-    const body = document.body;
-
-    function setTheme(theme) {
-      body.classList.remove("theme-cars", "theme-goats", "theme-xbox", "theme-rainbow");
-      body.classList.add(`theme-${theme}`);
-      themeButtons.forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.theme === theme);
-      });
+    // Simple persistence helpers
+    function safeGet(key, fallback) {
       try {
-        localStorage.setItem("killianTheme", theme);
+        const v = localStorage.getItem(key);
+        return v === null ? fallback : JSON.parse(v);
       } catch (_) {
-        // ignore if localStorage not allowed
+        return fallback;
+      }
+    }
+    function safeSet(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (_) {
+        // ignore
       }
     }
 
-    themeButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const theme = btn.dataset.theme;
-        setTheme(theme);
+    // Missions & XP
+    const missionIds = ["hotwheels", "goat", "arcade"];
+    let completedMissions = safeGet("killianMissions", { hotwheels: false, goat: false, arcade: false });
+
+    const missionListEl = document.getElementById("missionList");
+    const missionHintEl = document.getElementById("missionHint");
+    const missionButtonEl = document.getElementById("missionButton");
+    const xpBarEl = document.getElementById("xpBar");
+    const xpLabelEl = document.getElementById("xpLabel");
+
+    function renderMissions() {
+      missionIds.forEach(id => {
+        const item = missionListEl.querySelector(`[data-id="${id}"]`);
+        if (!item) return;
+        const isDone = !!completedMissions[id];
+        item.classList.toggle("completed", isDone);
+        const check = item.querySelector(".mission-check");
+        if (check) {
+          check.textContent = isDone ? "✓" : "";
+        }
       });
-    });
 
-    // Load saved theme (if any)
-    try {
-      const savedTheme = localStorage.getItem("killianTheme");
-      if (savedTheme && ["cars", "goats", "xbox", "rainbow"].includes(savedTheme)) {
-        setTheme(savedTheme);
+      const doneCount = missionIds.filter(id => completedMissions[id]).length;
+      const total = missionIds.length;
+      const pct = (doneCount / total) * 100;
+
+      xpBarEl.style.width = pct + "%";
+      xpLabelEl.textContent = `${doneCount} / ${total}`;
+
+      if (doneCount === total) {
+        missionHintEl.textContent = "Nice work, mission complete!";
+      } else if (doneCount === 0) {
+        missionHintEl.textContent = "Complete all steps, then press the button!";
       } else {
-        setTheme("cars");
+        missionHintEl.textContent = "You’re on your way – keep going!";
       }
-    } catch (_) {
-      setTheme("cars");
     }
 
-    // === CONFETTI ===
+    function markMissionDone(id) {
+      if (!missionIds.includes(id)) return;
+      completedMissions[id] = true;
+      safeSet("killianMissions", completedMissions);
+      renderMissions();
+    }
+
+    if (missionButtonEl) {
+      missionButtonEl.addEventListener("click", () => {
+        const doneCount = missionIds.filter(id => completedMissions[id]).length;
+        if (doneCount === missionIds.length) {
+          launchConfetti(130);
+        } else {
+          // Soft nudge, no confetti unless actually done
+          launchConfetti(40);
+        }
+      });
+    }
+
+    // Goat hop
+    const goatIcon = document.getElementById("goatIcon");
+    const goatText = document.getElementById("goatText");
+    const goatMessages = [
+      "BAAA! The goat just did a mega jump.",
+      "You booped the goat! It loves it.",
+      "Ultra-silly goat mode activated.",
+      "Goat did a 360° spin (kinda).",
+      "Goat is now Captain Headbutt."
+    ];
+    let goatClicks = 0;
+
+    if (goatIcon) {
+      goatIcon.addEventListener("click", () => {
+        goatIcon.classList.remove("hop");
+        void goatIcon.offsetWidth;
+        goatIcon.classList.add("hop");
+
+        goatClicks++;
+        const msg = goatMessages[Math.floor(Math.random() * goatMessages.length)];
+        if (goatText) {
+          goatText.textContent = msg;
+        }
+        if (goatClicks >= 3) {
+          markMissionDone("goat");
+        }
+      });
+    }
+
+    // Garage click (any click on card counts)
+    const zoneGarage = document.getElementById("zoneGarage");
+    if (zoneGarage) {
+      zoneGarage.addEventListener("click", () => {
+        markMissionDone("hotwheels");
+      });
+    }
+
+    // Arcade click
+    const zoneArcade = document.getElementById("zoneArcade");
+    if (zoneArcade) {
+      zoneArcade.addEventListener("click", () => {
+        markMissionDone("arcade");
+      });
+    }
+
+    // Confetti
     const confettiColors = [
       "#ffcc00",
       "#ff3b30",
@@ -686,56 +967,8 @@
       confettiButton.addEventListener("click", () => launchConfetti());
     }
 
-    // === GOAT HOP ===
-    const goatIcon = document.getElementById("goatIcon");
-    const goatMessage = document.getElementById("goatMessage");
-    const goatMessages = [
-      "BAAA! The goat did a super jump!",
-      "Goat attack! (Friendly kind.)",
-      "Silly goat unlocked mega hop mode!",
-      "That goat just did a backflip… probably.",
-      "You booped the goat! It loves it."
-    ];
-
-    if (goatIcon) {
-      goatIcon.addEventListener("click", () => {
-        goatIcon.classList.remove("jump");
-        void goatIcon.offsetWidth; // restart animation
-        goatIcon.classList.add("jump");
-        if (goatMessage) {
-          const randomText = goatMessages[Math.floor(Math.random() * goatMessages.length)];
-          goatMessage.textContent = randomText;
-        }
-      });
-    }
-
-    // === XBOX CHEER (NO CONFETTI) ===
-    const xboxTile = document.getElementById("xboxTile");
-    const xboxMessage = document.getElementById("xboxMessage");
-    const xboxCheers = [
-      "GAME TIME! You’ve got this, Killian! 💪",
-      "New high score incoming… I can feel it. ⭐",
-      "Controller ready. Brain ready. GO! 🎮",
-      "You’re the Xbox boss, buddy! 👑",
-      "No one can stop Killian the Great! 🚀"
-    ];
-
-    if (xboxTile && xboxMessage) {
-      xboxTile.addEventListener("click", () => {
-        const randomText = xboxCheers[Math.floor(Math.random() * xboxCheers.length)];
-        xboxMessage.textContent = randomText;
-
-        // Soft glow flash
-        xboxTile.classList.add("xbox-glow");
-        setTimeout(() => {
-          xboxTile.classList.add("xbox-glow-remove");
-          xboxTile.classList.remove("xbox-glow");
-          setTimeout(() => {
-            xboxTile.classList.remove("xbox-glow-remove");
-          }, 400);
-        }, 500);
-      });
-    }
+    // Initial render
+    renderMissions();
   </script>
 </body>
 </html>
