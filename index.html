@@ -650,17 +650,10 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       font-size: 0.8rem;
       color: var(--text-muted);
-    }
-
-    .tip-pill {
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      background: rgba(0, 0, 0, 0.55);
     }
 
     .confetti-button-main {
@@ -723,15 +716,20 @@
       pointer-events: none;
       opacity: 0.95;
       z-index: 999;
-      animation: confetti-fall 1200ms linear forwards;
+      transform: translate3d(0, 0, 0);
+      animation-name: confetti-fall;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
     }
 
     @keyframes confetti-fall {
       0% {
-        transform: translate3d(0, -100vh, 0) rotateZ(0deg);
+        transform: translate3d(0, 0, 0) rotateZ(0deg);
+        opacity: 1;
       }
       100% {
-        transform: translate3d(0, 100vh, 0) rotateZ(360deg);
+        transform: translate3d(var(--dx, 0px), var(--dy, 80vh), 0) rotateZ(720deg);
+        opacity: 0;
       }
     }
 
@@ -1028,11 +1026,8 @@
         </button>
       </section>
 
-      <!-- Bottom row: parent tip + confetti button -->
+      <!-- Bottom row: just the button now -->
       <section class="bottom-row">
-        <div class="tip-pill">
-          Parent tip: bookmark this page so Killian can open his Control Center by himself.
-        </div>
         <button class="confetti-button-main" id="confettiButton" type="button">
           🎉 Celebrate Killian
         </button>
@@ -1199,12 +1194,12 @@
     }
 
     if (missionButtonEl) {
-      missionButtonEl.addEventListener("click", () => {
+      missionButtonEl.addEventListener("click", (e) => {
         const doneCount = missionIds.filter(id => completedMissions[id]).length;
         if (doneCount === missionIds.length) {
-          launchConfetti(130);
+          launchConfetti(130, e.clientX, e.clientY);
         } else {
-          launchConfetti(40);
+          launchConfetti(40, e.clientX, e.clientY);
         }
       });
     }
@@ -1328,13 +1323,28 @@
       "#9eff3b"
     ];
 
-    function launchConfetti(count = 90) {
-      const width = window.innerWidth;
+    function launchConfetti(count = 90, originX = window.innerWidth / 2, originY = window.innerHeight / 2) {
+      const height = window.innerHeight;
+
       for (let i = 0; i < count; i++) {
         const piece = document.createElement("div");
         piece.className = "confetti-piece";
         piece.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-        piece.style.left = Math.random() * width + "px";
+
+        const startX = originX + (Math.random() - 0.5) * 160;
+        const startY = originY + (Math.random() - 0.5) * 40;
+        piece.style.left = startX + "px";
+        piece.style.top = startY + "px";
+
+        const dx = (Math.random() - 0.5) * 320;       // side drift
+        const dy = height * (0.5 + Math.random() * 0.6); // fall distance
+
+        piece.style.setProperty("--dx", dx + "px");
+        piece.style.setProperty("--dy", dy + "px");
+
+        const duration = 1500 + Math.random() * 900;
+        piece.style.animationDuration = duration + "ms";
+
         document.body.appendChild(piece);
         piece.addEventListener("animationend", () => {
           piece.remove();
@@ -1344,8 +1354,8 @@
 
     const confettiButton = document.getElementById("confettiButton");
     if (confettiButton) {
-      confettiButton.addEventListener("click", () => {
-        launchConfetti();
+      confettiButton.addEventListener("click", (e) => {
+        launchConfetti(90, e.clientX, e.clientY);
         stats.totalCelebrations += 1;
         safeSet("killianStats", stats);
         renderStats();
