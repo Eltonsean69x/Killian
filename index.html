@@ -631,6 +631,19 @@
       color: var(--accent-yellow);
     }
 
+    #resetMissionsButton {
+      cursor: pointer;
+      border: none;
+      font: inherit;
+      color: inherit;
+      background: rgba(255, 59, 48, 0.2);
+      border: 1px solid rgba(255, 59, 48, 0.6);
+    }
+
+    #resetMissionsButton:hover {
+      background: rgba(255, 59, 48, 0.3);
+    }
+
     /* Bottom row */
     .bottom-row {
       margin-top: 18px;
@@ -1010,6 +1023,9 @@
         <div class="stat-pill">
           Last visit: <strong id="statLastVisit">First time!</strong>
         </div>
+        <button class="stat-pill" id="resetMissionsButton" type="button">
+          Grown-ups: Reset missions
+        </button>
       </section>
 
       <!-- Bottom row: parent tip + confetti button -->
@@ -1335,6 +1351,24 @@
         renderStats();
         markMissionDone("celebrate");
         renderAchievements();
+      });
+    }
+
+    // Reset missions (grown-ups)
+    const resetButton = document.getElementById("resetMissionsButton");
+    if (resetButton) {
+      resetButton.addEventListener("click", () => {
+        completedMissions = {
+          hotwheels: false,
+          goat: false,
+          arcade: false,
+          console: false,
+          celebrate: false
+        };
+        goatClicks = 0;
+        consoleMissionDoneOnce = false;
+        safeSet("killianMissions", completedMissions);
+        renderMissions();
       });
     }
 
